@@ -30,11 +30,11 @@ struct SimpleJobC { }
 
 impl Job for SimpleJobA {
 
-    fn depends_on() -> Vec<&'static str> {
+    fn depends_on(&self) -> Vec<&'static str> {
         vec!("")
     }
 
-    fn run() -> &'static str {
+    fn run(&mut self) -> &'static str {
         eprintln!("Job A");
         "a"
     }
@@ -42,11 +42,11 @@ impl Job for SimpleJobA {
 
 impl Job for SimpleJobB {
 
-    fn depends_on() -> Vec<&'static str> {
+    fn depends_on(&self) -> Vec<&'static str> {
         vec!("a")
     }
 
-    fn run() -> &'static str {
+    fn run(&mut self) -> &'static str {
         eprintln!("Job B");
         "b"
     }
@@ -54,11 +54,11 @@ impl Job for SimpleJobB {
 
 impl Job for SimpleJobC {
 
-    fn depends_on() -> Vec<&'static str> {
+    fn depends_on(&self) -> Vec<&'static str> {
         vec!("b")
     }
 
-    fn run() -> &'static str {
+    fn run(&mut self) -> &'static str {
         eprintln!("Job C");
         "c"
     }

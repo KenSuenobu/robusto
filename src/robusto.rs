@@ -1,5 +1,5 @@
 // Robusto
-// Distributed Job Engine
+// Robusto Job Dispatcher and Main Library
 //
 // Copyright 2020 Ken Suenobu
 //
@@ -15,8 +15,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Defines a `Task` for Robusto.
-pub mod job;
+use crate::job::Job;
 
-/// The Robusto main dispatcher library.
-pub mod robusto;
+struct JobStore {
+    job: Box<dyn Job>,
+}
+
+impl JobStore {
+    pub fn new(job: Box<dyn Job>) -> Self {
+        Self {
+            job,
+        }
+    }
+}
+
+#[derive(Default)]
+struct Robusto {
+    jobs_list: Vec<JobStore>,
+}
+
+impl Robusto {
+    pub fn add_job(&mut self, job: Box<dyn Job>) {
+        self.jobs_list.push(JobStore::new(job));
+    }
+}
