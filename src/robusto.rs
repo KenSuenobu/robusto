@@ -18,16 +18,18 @@
 use crate::job::Job;
 use crate::jobstatus::JobStatus;
 use crate::jobstatus::JobStatus::Waiting;
+use std::thread;
+use std::cell::RefCell;
 
 struct JobStore {
-    job: Box<dyn Job>,
+    job: RefCell<Box<dyn Job>>,
     status: JobStatus,
 }
 
 impl JobStore {
     pub fn new(job: Box<dyn Job>) -> Self {
         Self {
-            job,
+            job: RefCell::new(job),
             status: Waiting,
         }
     }
@@ -41,5 +43,15 @@ struct Robusto {
 impl Robusto {
     pub fn add_job(&mut self, job: Box<dyn Job>) {
         self.jobs_list.push(JobStore::new(job));
+    }
+
+    pub fn run(&mut self) {
+        let handle = thread::spawn(|| {
+            for i in 0..self.jobs_list.len() {
+                let mut job_ref = self.jobs_list.get(i).unwrap();
+
+                job_ref.job.borrow_mut().run();
+            }
+        });
     }
 }
