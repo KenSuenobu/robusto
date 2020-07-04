@@ -16,4 +16,4 @@
 // limitations under the License.
 
 /// Defines a `Task` for Robusto
-pub mod task;
+pub mod job;

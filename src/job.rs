@@ -17,12 +17,12 @@
 
 /// This defines a `Job` that is used by Robusto.  All runnable `Job`s must implement
 /// this trait.
-trait Job {
+pub trait Job {
 
     /// Provides a list of the names of `Job`s that must be complete before this `Job`
     /// will trigger a `run()` call.  This is where the DAG can be built.  `Job`s can
     /// depend on more than one `Job` name to be triggered.
-    fn depends_on() -> [&'static str];
+    fn depends_on() -> Vec<&'static str>;
 
     /// Provides an entry point for a `Job` to run.  Once the `Job` is complete, it must
     /// return the name of the task that was run, so that other `Job`s that may depend on
