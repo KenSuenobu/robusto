@@ -1,5 +1,5 @@
 // Robusto
-// Distributed Job Engine
+// Job Status Enumerations
 //
 // Copyright 2020 Ken Suenobu
 //
@@ -15,11 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Defines a `Job`: a runnable, asyncronous task.
-pub mod job;
-
-/// Defines the `JobStatus` for a `Job`.
-pub mod jobstatus;
-
-/// The Robusto main dispatcher library.
-pub mod robusto;
+pub enum JobStatus {
+    Waiting,
+    Running,
+    Finished,
+    Failed,
+}

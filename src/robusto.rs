@@ -16,15 +16,19 @@
 // limitations under the License.
 
 use crate::job::Job;
+use crate::jobstatus::JobStatus;
+use crate::jobstatus::JobStatus::Waiting;
 
 struct JobStore {
     job: Box<dyn Job>,
+    status: JobStatus,
 }
 
 impl JobStore {
     pub fn new(job: Box<dyn Job>) -> Self {
         Self {
             job,
+            status: Waiting,
         }
     }
 }
