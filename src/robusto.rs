@@ -47,19 +47,32 @@ impl Robusto {
     }
 
     pub fn run(&mut self) {
-        let mut handles = vec![];
-        let count = self.jobs_list.lock().unwrap().len();
-
-        for i in 0..count {
-            let mut job_store = self.jobs_list.lock().unwrap().get_mut(i).unwrap();
-
-            let handle = thread::spawn(move || {
-                job_store.status = JobStatus::Running;
-                job_store.job.lock().unwrap().run();
-                job_store.status = JobStatus::Finished;
-            });
-
-            handles.push(handle);
-        }
+        // let mut handles = vec![];
+        // let count = self.jobs_list.lock().unwrap().len();
+        //
+        // for i in 0..count {
+        //     // let mut job_store = self.jobs_list.lock().unwrap().get_mut(i).unwrap();
+        //     let job_list = &self.jobs_list;
+        //
+        //     handles.push(thread::spawn(move ||
+        //         {
+        //             self.jobs_list;
+        //             eprintln!("Value: {}", i);
+        //
+        //             // let mut job = job_store.job.get_mut().unwrap();
+        //             // let wait_keys = job.depends_on();
+        //             //
+        //             // job_store.status = JobStatus::Queued;
+        //             // let job_key = job_store.job.lock().unwrap().run();
+        //             // job_store.status = JobStatus::Finished;
+        //             //
+        //             // // Publish job key to etcd
+        //         })
+        //     );
+        // }
+        //
+        // for handle in handles {
+        //     handle.join();
+        // }
     }
 }

@@ -63,10 +63,10 @@ impl Job for SimpleJobC {
 }
 
 fn main() {
-    let mut robusto = Robusto::new();
+    let mut robusto = Robusto::default();
 
-    robusto.add_job(SimpleJobA::default());
-    robusto.add_job(SimpleJobB::default());
-    robusto.add_job(SimpleJobC::default());
+    robusto.add_job(Box::new(SimpleJobA::default()));
+    robusto.add_job(Box::new(SimpleJobB::default()));
+    robusto.add_job(Box::new(SimpleJobC::default()));
     robusto.run();
 }
