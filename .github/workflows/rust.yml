@@ -9,8 +9,7 @@ jobs:
     - name: Checkout root project
       uses: actions/checkout@v1
     - name: Build
-      run: |
-        cargo build --all
+      run: sh scripts/build.sh
 
   Mac_OS_X:
     runs-on: macOS-latest
@@ -18,9 +17,7 @@ jobs:
     - name: Checkout root project
       uses: actions/checkout@v1
     - name: Build Project
-      run: |
-        export PATH="$PATH/.cargo/bin:$PATH"
-        cargo build --all
+      run: sh scripts/build.sh
 
   Windows:
     runs-on: windows-2016
