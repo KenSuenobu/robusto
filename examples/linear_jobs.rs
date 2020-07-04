@@ -18,6 +18,7 @@
 extern crate robusto;
 
 use robusto::job::Job;
+use robusto::robusto::*;
 
 #[derive(Default)]
 struct SimpleJobA { }
@@ -65,5 +66,10 @@ impl Job for SimpleJobC {
 }
 
 fn main() {
+    let mut robusto = Robusto::new();
 
+    robusto.add_job(SimpleJobA::default());
+    robusto.add_job(SimpleJobB::default());
+    robusto.add_job(SimpleJobC::default());
+    robusto.run();
 }

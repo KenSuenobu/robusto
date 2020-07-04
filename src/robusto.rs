@@ -19,39 +19,45 @@ use crate::job::Job;
 use crate::jobstatus::JobStatus;
 use crate::jobstatus::JobStatus::Waiting;
 use std::thread;
+use std::sync::{Arc, Mutex};
 use std::cell::RefCell;
 
 struct JobStore {
-    job: RefCell<Box<dyn Job>>,
+    job: Arc<Mutex<Box<dyn Job>>>,
     status: JobStatus,
 }
 
 impl JobStore {
     pub fn new(job: Box<dyn Job>) -> Self {
         Self {
-            job: RefCell::new(job),
+            job: Arc::new(Mutex::new(job)),
             status: Waiting,
         }
     }
 }
 
 #[derive(Default)]
-struct Robusto {
-    jobs_list: Vec<JobStore>,
+pub struct Robusto {
+    jobs_list: Arc<Mutex<Vec<JobStore>>>,
 }
 
 impl Robusto {
     pub fn add_job(&mut self, job: Box<dyn Job>) {
-        self.jobs_list.push(JobStore::new(job));
+        self.jobs_list.lock().unwrap().push(JobStore::new(job));
     }
 
     pub fn run(&mut self) {
-        let handle = thread::spawn(|| {
-            for i in 0..self.jobs_list.len() {
-                let mut job_ref = self.jobs_list.get(i).unwrap();
+        let mut handles = vec![];
+        let count = self.jobs_list.lock().unwrap().len();
 
-                job_ref.job.borrow_mut().run();
-            }
-        });
+        for i in 0..count {
+            let mut job_store = self.jobs_list.lock().unwrap().get(i).unwrap();
+
+            let handle = thread::spawn(move || {
+                job_store.job.lock().unwrap().run();
+            });
+
+            handles.push(handle);
+        }
     }
 }
