@@ -21,18 +21,17 @@ use robusto::job::Job;
 use robusto::robusto::*;
 
 #[derive(Default)]
-struct SimpleJobA { }
+struct SimpleJobA {}
 
 #[derive(Default)]
-struct SimpleJobB { }
+struct SimpleJobB {}
 
 #[derive(Default)]
-struct SimpleJobC { }
+struct SimpleJobC {}
 
 impl Job for SimpleJobA {
-
     fn depends_on(&self) -> Vec<&'static str> {
-        vec!("")
+        vec![""]
     }
 
     fn run(&mut self) -> &'static str {
@@ -42,9 +41,8 @@ impl Job for SimpleJobA {
 }
 
 impl Job for SimpleJobB {
-
     fn depends_on(&self) -> Vec<&'static str> {
-        vec!("a")
+        vec!["a"]
     }
 
     fn run(&mut self) -> &'static str {
@@ -54,9 +52,8 @@ impl Job for SimpleJobB {
 }
 
 impl Job for SimpleJobC {
-
     fn depends_on(&self) -> Vec<&'static str> {
-        vec!("b")
+        vec!["b"]
     }
 
     fn run(&mut self) -> &'static str {

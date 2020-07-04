@@ -18,9 +18,9 @@
 use crate::job::Job;
 use crate::jobstatus::JobStatus;
 use crate::jobstatus::JobStatus::Waiting;
-use std::thread;
-use std::sync::{Arc, Mutex};
 use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
+use std::thread;
 
 struct JobStore {
     job: Arc<Mutex<Box<dyn Job>>>,

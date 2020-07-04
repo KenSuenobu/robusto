@@ -18,7 +18,6 @@
 /// This defines a `Job` that is used by Robusto.  All runnable `Job`s must implement
 /// this trait.
 pub trait Job: Send {
-
     /// Provides a list of the names of `Job`s that must be complete before this `Job`
     /// will trigger a `run()` call.  This is where the DAG can be built.  `Job`s can
     /// depend on more than one `Job` name to be triggered.
@@ -28,5 +27,4 @@ pub trait Job: Send {
     /// return the name of the task that was run, so that other `Job`s that may depend on
     /// this `Job` can be triggered.
     fn run(&mut self) -> &'static str;
-
 }
