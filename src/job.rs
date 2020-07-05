@@ -35,10 +35,21 @@ pub trait Job: Send {
     fn job_name(&self) -> &'static str;
 }
 
+/// This is the status of a `Job` that is waiting to be run in the `Robusto` universe.
 pub enum JobStatus {
-    Waiting,
+    /// Queued state - indicates that a `Job` is dormant, waiting to be queued up to run.
     Queued,
+
+    /// Waiting state - indicates that a `Job` is waiting to run, which means the `depends_on`
+    /// dependencies list has not yet been triggered.
+    Waiting,
+
+    /// Running state - indicates that a `Job` is currently running as a thread.
     Running,
+
+    /// Finished state - indicates that a `Job` has completed successfully.
     Finished,
+
+    /// Failed state - indicates that a `Job` has failed.
     Failed,
 }
