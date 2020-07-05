@@ -25,8 +25,18 @@ pub trait Job: Send {
 
     /// Provides an entry point for a `Job` to run.  Once the `Job` is complete, it must
     /// return the name of the task that was run, so that other `Job`s that may depend on
-    /// this `Job` can be triggered.  Depending on the return value, this will trigger the
-    /// next `Job` to be run (depending on the `Job`'s name), or an error to be recorded, and
-    /// for all subsequent `Job`s to fail.
-    fn run(&mut self) -> Option<&'static str>;
+    /// this `Job` can be triggered.  If the job returns `true`, it indicates that the
+    /// code has run properly.  `false` indicates an error.
+    fn run(&mut self) -> bool;
+
+    /// Returns the name of the job.
+    fn get_job_name(&self) -> &'static str;
+}
+
+pub enum JobStatus {
+    Waiting,
+    Queued,
+    Running,
+    Finished,
+    Failed,
 }

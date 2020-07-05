@@ -18,8 +18,5 @@
 /// Defines a `Job`: a runnable, asyncronous task.
 pub mod job;
 
-/// Defines the `JobStatus` for a `Job`.
-pub mod jobstatus;
-
 /// The Robusto main dispatcher library.
 pub mod robusto;

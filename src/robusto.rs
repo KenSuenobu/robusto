@@ -15,10 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::job::Job;
-use crate::jobstatus::JobStatus::Waiting;
+use crate::job::{Job, JobStatus};
 use std::thread;
-use crate::jobstatus::JobStatus;
 
 struct JobStore {
     job: Box<dyn Job>,
@@ -29,7 +27,7 @@ impl JobStore {
     pub fn new(job: Box<dyn Job>) -> Self {
         Self {
             job,
-            status: Waiting,
+            status: JobStatus::Queued,
         }
     }
 }
@@ -49,8 +47,15 @@ impl Robusto {
 
         for mut job_store in self.jobs_list {
             handles.push(thread::spawn(move || {
-                job_store.status = JobStatus::Queued;
+                job_store.status = JobStatus::Waiting;
+
+                // Query etcd to see if required job IDs are done running.
+                job_store.status = JobStatus::Running;
+
+                // Run the job
                 job_store.job.run();
+
+                // Check the status of the job to see if it returns a value.
                 job_store.status = JobStatus::Finished;
             }));
         }
