@@ -34,9 +34,9 @@ impl Job for SimpleJobA {
         vec![""]
     }
 
-    fn run(&mut self) -> &'static str {
+    fn run(&mut self) -> Option<&'static str> {
         eprintln!("Job A");
-        "a"
+        Some("a")
     }
 }
 
@@ -45,9 +45,9 @@ impl Job for SimpleJobB {
         vec!["a"]
     }
 
-    fn run(&mut self) -> &'static str {
+    fn run(&mut self) -> Option<&'static str> {
         eprintln!("Job B");
-        "b"
+        Some("b")
     }
 }
 
@@ -56,9 +56,9 @@ impl Job for SimpleJobC {
         vec!["b"]
     }
 
-    fn run(&mut self) -> &'static str {
+    fn run(&mut self) -> Option<&'static str> {
         eprintln!("Job C");
-        "c"
+        Some("c")
     }
 }
 
