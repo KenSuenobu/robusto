@@ -16,21 +16,19 @@
 // limitations under the License.
 
 use crate::job::Job;
-use crate::jobstatus::JobStatus;
 use crate::jobstatus::JobStatus::Waiting;
-use std::cell::RefCell;
-use std::sync::{Arc, Mutex};
 use std::thread;
+use crate::jobstatus::JobStatus;
 
 struct JobStore {
-    job: Arc<Mutex<Box<dyn Job>>>,
+    job: Box<dyn Job>,
     status: JobStatus,
 }
 
 impl JobStore {
     pub fn new(job: Box<dyn Job>) -> Self {
         Self {
-            job: Arc::new(Mutex::new(job)),
+            job,
             status: Waiting,
         }
     }
@@ -38,41 +36,27 @@ impl JobStore {
 
 #[derive(Default)]
 pub struct Robusto {
-    jobs_list: Arc<Mutex<Vec<JobStore>>>,
+    jobs_list: Vec<JobStore>,
 }
 
 impl Robusto {
     pub fn add_job(&mut self, job: Box<dyn Job>) {
-        self.jobs_list.lock().unwrap().push(JobStore::new(job));
+        self.jobs_list.push(JobStore::new(job));
     }
 
-    pub fn run(&mut self) {
-        // let mut handles = vec![];
-        // let count = self.jobs_list.lock().unwrap().len();
-        //
-        // for i in 0..count {
-        //     // let mut job_store = self.jobs_list.lock().unwrap().get_mut(i).unwrap();
-        //     let job_list = &self.jobs_list;
-        //
-        //     handles.push(thread::spawn(move ||
-        //         {
-        //             self.jobs_list;
-        //             eprintln!("Value: {}", i);
-        //
-        //             // let mut job = job_store.job.get_mut().unwrap();
-        //             // let wait_keys = job.depends_on();
-        //             //
-        //             // job_store.status = JobStatus::Queued;
-        //             // let job_key = job_store.job.lock().unwrap().run();
-        //             // job_store.status = JobStatus::Finished;
-        //             //
-        //             // // Publish job key to etcd
-        //         })
-        //     );
-        // }
-        //
-        // for handle in handles {
-        //     handle.join();
-        // }
+    pub fn run(self) {
+        let mut handles = vec![];
+
+        for mut job_store in self.jobs_list {
+            handles.push(thread::spawn(move || {
+                job_store.status = JobStatus::Queued;
+                job_store.job.run();
+                job_store.status = JobStatus::Finished;
+            }));
+        }
+
+        for handle in handles {
+            handle.join().unwrap();
+        }
     }
 }
