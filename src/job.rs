@@ -55,8 +55,8 @@ pub enum JobStatus {
 }
 
 pub struct JobStore {
-    job: Box<dyn Job>,
-    status: JobStatus,
+    pub job: Box<dyn Job>,
+    pub status: JobStatus,
 }
 
 impl JobStore {
