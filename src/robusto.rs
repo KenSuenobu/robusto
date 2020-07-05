@@ -53,7 +53,7 @@ impl Robusto {
                 job_store.status = JobStatus::Running;
 
                 // Run the job
-                job_store.job.run();
+                let _result = job_store.job.run();
 
                 // Check the status of the job to see if it returns a value.
                 job_store.status = JobStatus::Finished;

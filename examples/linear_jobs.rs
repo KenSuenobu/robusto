@@ -19,6 +19,7 @@ extern crate robusto;
 
 use robusto::job::Job;
 use robusto::robusto::*;
+use std::io::Error;
 
 #[derive(Default)]
 struct SimpleJobA {}
@@ -34,12 +35,12 @@ impl Job for SimpleJobA {
         vec![""]
     }
 
-    fn run(&mut self) -> bool {
+    fn run(&mut self) -> Result<(), Error> {
         eprintln!("Job A");
-        true
+        Ok(())
     }
 
-    fn get_job_name(&self) -> &'static str { "a" }
+    fn job_name(&self) -> &'static str { "a" }
 }
 
 impl Job for SimpleJobB {
@@ -47,12 +48,12 @@ impl Job for SimpleJobB {
         vec!["a"]
     }
 
-    fn run(&mut self) -> bool {
+    fn run(&mut self) -> Result<(), Error> {
         eprintln!("Job B");
-        true
+        Ok(())
     }
 
-    fn get_job_name(&self) -> &'static str { "b" }
+    fn job_name(&self) -> &'static str { "b" }
 }
 
 impl Job for SimpleJobC {
@@ -60,12 +61,12 @@ impl Job for SimpleJobC {
         vec!["b"]
     }
 
-    fn run(&mut self) -> bool {
+    fn run(&mut self) -> Result<(), Error> {
         eprintln!("Job C");
-        true
+        Ok(())
     }
 
-    fn get_job_name(&self) -> &'static str { "c" }
+    fn job_name(&self) -> &'static str { "c" }
 }
 
 fn main() {

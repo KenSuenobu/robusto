@@ -15,6 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::io::Error;
+
 /// This defines a `Job` that is used by Robusto.  All runnable `Job`s must implement
 /// this trait.
 pub trait Job: Send {
@@ -25,12 +27,12 @@ pub trait Job: Send {
 
     /// Provides an entry point for a `Job` to run.  Once the `Job` is complete, it must
     /// return the name of the task that was run, so that other `Job`s that may depend on
-    /// this `Job` can be triggered.  If the job returns `true`, it indicates that the
-    /// code has run properly.  `false` indicates an error.
-    fn run(&mut self) -> bool;
+    /// this `Job` can be triggered.  Returns an `Ok(())` result, or an error otherwise.
+    fn run(&mut self) -> Result<(), Error>;
 
-    /// Returns the name of the job.
-    fn get_job_name(&self) -> &'static str;
+    /// Retrieves the name of this job, so that it can be sent to `etcd` to trigger other
+    /// `Job`s.
+    fn job_name(&self) -> &'static str;
 }
 
 pub enum JobStatus {
