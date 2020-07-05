@@ -53,3 +53,17 @@ pub enum JobStatus {
     /// Failed state - indicates that a `Job` has failed.
     Failed,
 }
+
+pub struct JobStore {
+    job: Box<dyn Job>,
+    status: JobStatus,
+}
+
+impl JobStore {
+    pub fn new(job: Box<dyn Job>) -> Self {
+        Self {
+            job,
+            status: JobStatus::Queued,
+        }
+    }
+}

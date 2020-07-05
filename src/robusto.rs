@@ -15,22 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::job::{Job, JobStatus};
-use std::thread;
-
-struct JobStore {
-    job: Box<dyn Job>,
-    status: JobStatus,
-}
-
-impl JobStore {
-    pub fn new(job: Box<dyn Job>) -> Self {
-        Self {
-            job,
-            status: JobStatus::Queued,
-        }
-    }
-}
+use crate::job::{Job, JobStatus, JobStore};
+use std::thread::spawn;
 
 #[derive(Default)]
 pub struct Robusto {
@@ -46,7 +32,7 @@ impl Robusto {
         let mut handles = vec![];
 
         for mut job_store in self.jobs_list {
-            handles.push(thread::spawn(move || {
+            handles.push(spawn(move || {
                 job_store.status = JobStatus::Waiting;
 
                 // Query etcd to see if required job IDs are done running.

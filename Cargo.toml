@@ -20,5 +20,4 @@ name = "robusto"
 path = "src/lib.rs"
 
 [dependencies]
-etcd-client = "^0.5"
 
